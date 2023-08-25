@@ -4,6 +4,9 @@ export DEFAULT_MAVEN_VERSION="3.3.9"
 export BUILDPACK_STDLIB_URL="${LANG_GOODRAIN_ME:-http://lang.goodrain.me}/java/stdlib.sh"
 
 install_maven() {
+  echo "阶段2结束时间"
+  date
+
   local installDir=$1
   local buildDir=$2
   mavenHome=$installDir/.maven
@@ -32,6 +35,9 @@ install_maven() {
 The default supported version is ${DEFAULT_MAVEN_VERSION}, Use ${mavenVersion} "
     return 1
   fi
+
+  echo "阶段2结束时间"
+  date
 }
 
 download_maven() {

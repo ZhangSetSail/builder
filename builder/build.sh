@@ -1,6 +1,9 @@
 #!/bin/bash
 set -eo pipefail
 
+echo "整体构建开始时间"
+date
+
 [ "$DEBUG" ] && set -x
 
 if [[ -f /etc/environment_proxy ]]; then
@@ -203,3 +206,6 @@ if [[ "$slug_file" != "-" ]]; then
         curl -0 -s -o /dev/null -X PUT -T $slug_file "$put_url"
     fi
 fi
+
+echo "整体构建结束时间"
+date

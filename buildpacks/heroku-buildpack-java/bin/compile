@@ -2,6 +2,9 @@
 # bin/compile <build-dir> <cache-dir> <env-dir>
 
 # fail fast
+echo "compile开始时间"
+date
+
 set -e
 [ "$DEBUG" ] && set -x
 
@@ -23,10 +26,16 @@ source $BP_DIR/lib/getrunner.sh
 
 export_env $ENV_DIR "." "JAVA_OPTS|JAVA_TOOL_OPTIONS"
 
+echo "阶段1开始时间"
+date
+
 install_jdk "${BUILD_DIR}" "${CACHE_DIR}"
 
 [ -n "$(find ${BUILD_DIR} -type f -name "*.kt")" ] && mcount "kotlin.source"
 [ -n "$(find ${BUILD_DIR} -type f -name "*.groovy")" ] && mcount "groovy.source"
+
+echo "阶段1结束时间"
+date
 
 if [[ -f bin/java-pre-compile ]]; then
     status "Running bin/java-pre-compile hook"
@@ -34,13 +43,22 @@ if [[ -f bin/java-pre-compile ]]; then
     bin/java-pre-compile
 fi
 
+echo "阶段2结束时间"
+date
+
 run_mvn "compile" $BUILD_DIR $CACHE_DIR
+
+echo "阶段3结束时间"
+date
 
 if [[ -f bin/java-post-compile ]]; then
     status "Running bin/java-post-compile hook"
     chmod a+x bin/java-post-compile
     bin/java-post-compile
 fi
+
+echo "阶段4结束时间"
+date
 
 if [ -f "$BUILD_DIR/.iswar" ];then
     WEBSERVER=`cat $BUILD_DIR/webserver`
@@ -53,6 +71,9 @@ if [ -f "$BUILD_DIR/.iswar" ];then
         dl_jetty_runner $WEBSERVER $OFFLINE
     fi
 fi
+
+echo "compile结束时间"
+date
 
 #if has_maven_wrapper $BUILD_DIR; then
 #  cache_copy ".m2/wrapper" $BUILD_DIR $CACHE_DIR
