@@ -94,8 +94,6 @@ save_default_cache_directories() {
   # node_modules
   if [[ -e "$build_dir/node_modules" ]]; then
     echo "- node_modules"
-    mkdir -p "$cache_dir/node/node_modules"
-    cp -a "$build_dir/node_modules" "$(dirname "$cache_dir/node/node_modules")"
   else
     # this can happen if there are no dependencies
     mcount "cache.no-node-modules"
